@@ -1,0 +1,14 @@
+[project]
+name = "Breast-Cancer-API"
+version = "1.1.0"
+description = "REST API for breast cancer prediction based in numerical parameters"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "black>=25.11.0",
+    "flask>=3.1.2",
+    "joblib>=1.5.3",
+    "pandas>=2.3.3",
+    "requests>=2.32.5",
+    "scikit-learn>=1.6.1",
+]
