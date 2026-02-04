@@ -2,6 +2,10 @@
 
 ### Machine Learning · MLOps · Python · Docker · CI/CD
 
+>> ### **Project Status:** Active Development (Pre-Production)
+>> ### This project is under active development and intended as a production-oriented ML engineering showcase.
+>> ### The API contract is considered stable, but internal components may evolve.
+
 This repository showcases a production-oriented Machine Learning API for breast cancer prediction, built with Python and Flask, following modern ML engineering and MLOps best practices.
 
 The project is intentionally designed to reflect real-world ML workflows, emphasizing reproducibility, clean architecture, automated testing, and deployment readiness rather than notebook-driven experimentation.
