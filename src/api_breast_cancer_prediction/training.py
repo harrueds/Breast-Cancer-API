@@ -2,26 +2,15 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from src.api_breast_cancer_prediction.logging_config import setup_logging
 
 import joblib
 import logging
 import os
 
-# =========================
-# Logging Configuration
-# =========================
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%d/%m/%Y %H:%M:%S",
-    handlers=[
-        logging.FileHandler("logs/training_breast_cancer.log"),
-        logging.StreamHandler(),
-    ],
-)
-
 
 def train_model():
+    os.makedirs("models", exist_ok=True)  # create models directory if not present
     # ============================================================================
     # 1. DATASET LOADING
     # ============================================================================
@@ -117,4 +106,5 @@ def train_model():
 
 
 if __name__ == "__main__":
+    setup_logging("training_breast_cancer.log")
     train_model()

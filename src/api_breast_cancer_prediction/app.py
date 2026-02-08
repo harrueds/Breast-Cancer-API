@@ -1,22 +1,11 @@
 from flask import Flask, request, Response
+from src.api_breast_cancer_prediction.logging_config import setup_logging
 import joblib
 import logging
 import pandas as pd
 import json
+import sys
 
-# ============================================================================
-# LOGGING CONFIGURATION
-# ============================================================================
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%d/%m/%Y %H:%M:%S",
-    handlers=[
-        logging.FileHandler("logs/app_breast_cancer.log"),
-        logging.StreamHandler(),
-    ],
-)
 
 # ============================================================================
 # FLASK APP + MODEL LOADING
@@ -24,10 +13,28 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-model = joblib.load("models/model_breast_cancer.pkl")
-logging.info("=" * 60)
-logging.info("Classification model loaded successfully into memory")
-logging.info("=" * 60)
+model = None
+
+
+def load_model():
+    global model
+
+    if model is not None:
+        return response_json({"error": "Model not loaded yet"}, 503)
+
+    try:
+        model = joblib.load("models/model_breast_cancer.pkl")
+
+        logging.info("=" * 60)
+        logging.info("Classification model loaded successfully into memory")
+        logging.info("=" * 60)
+
+    except FileNotFoundError:
+        logging.error("=" * 60)
+        logging.error("Model file not found: models/model_breast_cancer.pkl")
+        logging.error("You must run training.py before starting the API.")
+        logging.error("=" * 60)
+        sys.exit(1)
 
 
 def response_json(data, status=200):
@@ -50,6 +57,7 @@ def health_check():
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    load_model()
     """
     Prediction endpoint.
 
@@ -119,4 +127,5 @@ def run():
 
 
 if __name__ == "__main__":
+    setup_logging("app_breast_cancer.log")
     run()

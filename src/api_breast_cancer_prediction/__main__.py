@@ -3,18 +3,7 @@ import requests
 import json
 import logging
 
-
-# ====================================================================
-# LOGGING SYSTEM CONFIGURATION
-# ====================================================================
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler("logs/main_breast_cancer.log"),
-        logging.StreamHandler(),
-    ],
-)
+from src.api_breast_cancer_prediction.logging_config import setup_logging
 
 
 # def run_training():
@@ -48,6 +37,7 @@ def run_test_app():
 
 
 if __name__ == "__main__":
+    setup_logging("main_breast_cancer.log")
     logging.info("Type what you want to execute:")
     logging.info(" - 'execute'  -> run flask app")
     logging.info(" - 'exit'     -> exit the program")
