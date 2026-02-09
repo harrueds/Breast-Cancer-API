@@ -2,49 +2,46 @@
 
 ### Machine Learning · MLOps · Python · Docker · CI/CD
 
->> ### **Project Status:** Active Development (Pre-Production)
->> ### This project is under active development and intended as a production-oriented ML engineering showcase.
->> ### The API contract is considered stable, but internal components may evolve.
+[![wakatime](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950.svg)](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950)
 
-This repository showcases a production-oriented Machine Learning API for breast cancer prediction, built with Python and Flask, following modern ML engineering and MLOps best practices.
+
+> **Project Status:** Active Development (Pre-Production)
+> This project is under active development and intended as a production-oriented ML engineering showcase.
+> The API contract is considered stable, but internal components may evolve.
+
+This repository showcases a production-oriented Machine Learning REST API for breast cancer prediction, built with **Python** and **Flask**, following modern ML engineering and MLOps best practices.
 
 The project is intentionally designed to reflect real-world ML workflows, emphasizing reproducibility, clean architecture, automated testing, and deployment readiness rather than notebook-driven experimentation.
 
-## Project Highlights (Why this project matters)
+---
 
-- End-to-end ML pipeline: model training → persistence → inference via REST API
+## Project Highlights
 
-- Production-ready structure using the `src/` layout (PEP-compliant, import-safe)
-
-- Reproducible environments with `uv` and locked dependencies
-
-- Automated CI/CD with GitHub Actions
-
+- End-to-end ML pipeline: **training → persistence → inference via REST API**
+- Production-ready structure using the **`src/` layout** (PEP-compliant, import-safe)
+- Reproducible environments with **`uv`** and locked dependencies (`pyproject.toml` + `uv.lock`)
+- Centralized logging configuration via `logging_config.py`
+- API startup protection: prevents serving predictions without a trained model
+- Automated testing with integration coverage
 - Containerized deployment with Docker
+- CI/CD automation with GitHub Actions
 
-- Explicit input validation aligned with the trained model
+This project is suitable as a portfolio reference for **ML Engineer / Applied Data Scientist** roles.
 
-- Clean separation between training, inference, and tests
-
-This project is suitable as a portfolio reference for ML Engineer / Applied Data Scientist roles.
+---
 
 ## Technical Stack
 
-- Language: Python 3.9+
+- **Language:** Python 3.9+
+- **API Framework:** Flask
+- **ML Stack:** scikit-learn
+- **Dependency Management:** uv (`pyproject.toml` + `uv.lock`)
+- **Testing:** Unit & integration tests
+- **Containerization:** Docker
+- **CI/CD:** GitHub Actions (not yet implemented)
+- **Architecture:** `src/`-based Python package layout
 
-- API Framework: Flask
-
-- ML Stack: scikit-learn
-
-- Dependency Management: `uv` (`pyproject.toml` + `uv.lock`)
-
-- Testing: Python-based unit & integration tests
-
-- Containerization: Docker
-
-- CI/CD: GitHub Actions
-
-- Project Layout: `src/`-based architecture
+---
 
 ## Architecture Overview
 
@@ -54,56 +51,55 @@ Training Pipeline
     ├── Data loading & preprocessing
     ├── Model training
     ├── Model evaluation
-    └── Model persistence (model_breast_cancer.pkl)
+    └── Model persistence (models/model_breast_cancer.pkl)
 
 Inference Pipeline
 └── app.py
-    ├── Model loading
+    ├── Model loading (on first prediction request)
     ├── Strict numerical input validation
-    ├── Prediction endpoint
+    ├── Prediction endpoint (/predict)
     └── JSON response
 
-Quality & Delivery
-├── test_app.py      → Automated tests
-├── Dockerfile       → Reproducible builds
-└── CI/CD pipeline   → Continuous validation
+Observability & Delivery
+├── logging_config.py → Centralized logging setup
+├── test_app.py       → Automated tests
+├── Dockerfile        → Reproducible builds
+└── CI/CD pipeline    → Continuous validation
 ```
 
-The design mirrors how ML systems are typically deployed in cloud and MLOps environments, separating experimentation from serving.
+The design mirrors how ML systems are typically deployed in professional MLOps environments.
 
 ## Project Structure
 
 ```bash
-/Breast-Cancer-API/
-├── pyproject.toml                          # Project metadata & dependencies (uv)
-├── uv.lock                                 # Fully locked environment
-├── Dockerfile                              # Instructions to build Docker image
-├── README.md                               # This file
+Breast-Cancer-API/
+├── pyproject.toml
+├── uv.lock
+├── Dockerfile
+├── README.md
 ├── src/
 │   └── api_breast_cancer_prediction/
 │       ├── __init__.py
-│       ├── __main__.py                     # Entry point
-│       ├── app.py                          # REST API (inference)
-│       ├── training.py                     # Model training
-│       └── test_app.py                     # Unit & integration tests
+│       ├── __main__.py
+│       ├── app.py
+│       ├── training.py
+│       ├── test_app.py
+│       └── logging_config.py
 │
 ├── models/
-│       └──  model_breast_cancer.pkl        # Trained model artifact
+│   └── model_breast_cancer.pkl
 │
 ├── logs/
-│       ├── training_breast_cancer.log      # Generated by training.py
-│       ├── app_breast_cancer.log           # Generated by app.py
-│       └── test_app_breast_cancer.log      # Generated by test_app.py
+│   ├── training_breast_cancer.log
+│   ├── app_breast_cancer.log
+│   └── main_breast_cancer.log
 │
 └── .github/workflows/
-        └── ci-cd.yml                       # CI/CD automation
+    └── ci-cd.yml
 ```
 
-This layout follows industry-standard Python packaging practices, improving maintainability and scalability.
-
 ## Environment & Reproducibility
-
-Dependencies and virtual environments are managed using `uv`, ensuring:
+Dependencies and virtual environments are managed using uv, ensuring:
 
 - Deterministic builds
 
@@ -111,118 +107,176 @@ Dependencies and virtual environments are managed using `uv`, ensuring:
 
 - Clean separation from system Python
 
+Install dependencies:
+
 ```bash
 uv sync
 ```
 
-All commands are executed explicitly inside the managed environment:
+All commands should be executed inside the managed environment:
 
 ```bash
-uv run python -m src.api_breast_cancer_prediction
+uv run python ...
 ```
 
 ## Model Training
+Train the supervised ML model and persist it into models/:
 
 ```bash
-uv run python -m src.api_breast_cancer_prediction.training.py
+uv run python -m src.api_breast_cancer_prediction.training
 ```
 
-- Trains a supervised ML model on numerical features
+Training produces:
 
-- Persists the trained artifact as `model.pkl`
+- A trained classification model
 
-- Ensures compatibility between training and inference pipelines
+- A saved artifact:
+
+```bash
+models/model_breast_cancer.pkl
+```
+
+- Training logs:
+
+```bash
+logs/training_breast_cancer.log
+```
 
 ## Running the API
 
+Start the Flask inference service:
+
 ```bash
-uv run python -m src.api_breast_cancer_prediction
+uv run python -m src.api_breast_cancer_prediction.app
 ```
 
 Default endpoint:
 
-```text
+```bash
 http://127.0.0.1:5000
 ```
 
-Example health check:
+Health check:
 
 ```bash
 curl http://127.0.0.1:5000
 ```
 
-## Testing Strategy
+## Prediction Endpoint
 
-- Unit tests validate core logic
+The main endpoint is:
 
-- Integration tests validate API behavior
-
-- Tests are executed:
-    - Locally via `uv`
-    - Automatically in CI on every push / pull request
-
-```bash
-uv run python -m src.api_breast_cancer_prediction.test_app.py
+```text
+POST /predict
 ```
 
-## CI/CD & Automation
+Example request:
 
-The GitHub Actions pipeline:
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d '{"features": [14.2, 20.1, 92.3, 600.1, 0.11]}'
+```
 
-- Installs dependencies using `uv`
+## Model Availability Behavior
 
-- Runs automated tests
+The API requires a trained model artifact:
 
-- Builds the Docker image
+```bash
+models/model_breast_cancer.pkl
+```
 
-- Pushes the image to Docker Hub on merge to `main`
+If the model file is missing:
 
-This reflects real CI/CD pipelines used in production ML systems.
+- The API will log an error
+
+- The service will exit immediately:
+
+```bash
+You must run training.py before starting the API.
+```
+
+This ensures prediction endpoints are never served without a valid trained model.
+
+## Logging & Observability
+
+All components share a centralized logging system via:
+
+```text
+logging_config.py
+```
+
+Logs are written both to console and the logs/ directory:
+
+- `logs/app_breast_cancer.log`
+- `logs/training_breast_cancer.log`
+- `logs/main_breast_cancer.log`
+
+This mirrors production observability practices.
+
+## Testing Strategy
+
+Run automated tests locally:
+
+```bash
+uv run python -m src.api_breast_cancer_prediction.test_app
+```
+
+Tests validate:
+
+- Core inference logic
+- API endpoint behavior
+- Input validation
+
+Tests are also executed automatically in CI.
 
 ## Docker Deployment
 
+Build the Docker image:
+
 ```bash
 docker build -t breast_cancer_api .
+```
+
+Run the container:
+
+```bash
 docker run -d -p 5000:5000 breast_cancer_api
 ```
 
 The container encapsulates:
 
 - The trained model
+- The API runtime
+- Locked dependencies
 
-- The API
+## Version History
 
-- The exact runtime environment
+### v1.2.0 (2026-02)
 
-## Engineering & ML Focus
+- Centralized logging configuration (logging_config.py)
+- Improved API robustness when model artifact is missing
+- Cleaner startup behavior aligned with production services
 
-This project intentionally prioritizes:
-
-- Engineering discipline over notebooks
-
-- Reproducibility over ad-hoc experimentation
-
-- Deployment-readiness over toy examples
-
-It is designed to demonstrate how Machine Learning models are actually shipped, monitored, and maintained in professional environments.
-
-## Author
-
-Henzo Alejandro Arrué Muñoz
-Data Scientist & Machine Learning Practitioner
-
-- Email:
-    - [harrue.ds@gmail.com](mailto:harrue.ds@gmail.com)
-    - [henzo.arruemu@itacademy.cl](mailto:henzo.arruemu@itacademy.cl)
-
-- GitHub: [https://github.com/harrueds](https://github.com/harrueds)
-
-- LinkedIn: [https://www.linkedin.com/in/henzo-arrué-muñoz/](https://www.linkedin.com/in/henzo-arrué-muñoz/)
-
-## v1.1.0
+### v1.1.0 (2026-01)
 
 - Migrated to src/ layout
 - Switched dependency management from pip to uv
-- Improved project structure and reproducibility
+- Improved reproducibility and packaging structure
 
-Date: 2026-02
+## Author
+
+### Henzo Alejandro Arrué Muñoz
+
+- **Data Scientist & Machine Learning Practitioner**
+
+### Email:
+
+- [harrue.ds@gmail.com](mailto:harrue.ds@gmail.com)
+- [henzo.arruemu@itacademy.cl](mailto:henzo.arruemu@itacademy.cl)
+
+### Profiles
+
+- GitHub: [https://github.com/harrueds](https://github.com/harrueds)
+- LinkedIn: [https://www.linkedin.com/in/henzo-arrué-muñoz/](https://www.linkedin.com/in/henzo-arrué-muñoz/)
+- Dev.to: [https://dev.to/harrueds](https://dev.to/harrueds)
