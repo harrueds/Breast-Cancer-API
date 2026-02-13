@@ -1,13 +1,12 @@
 # Breast Cancer Prediction REST API
 
-### Machine Learning · MLOps · Python · Docker · CI/CD
+## Machine Learning · MLOps · Python · Docker · CI/CD
 
 [![wakatime](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950.svg)](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950)
+**Project Status:** Active Development (Pre-Production)
 
-
-> **Project Status:** Active Development (Pre-Production)
-> This project is under active development and intended as a production-oriented ML engineering showcase.
-> The API contract is considered stable, but internal components may evolve.
+- This project is under active development and intended as a production-oriented ML engineering showcase.
+- The API contract is considered stable, but internal components may evolve.
 
 This repository showcases a production-oriented Machine Learning REST API for breast cancer prediction, built with **Python** and **Flask**, following modern ML engineering and MLOps best practices.
 
@@ -94,20 +93,26 @@ Breast-Cancer-API/
 │   ├── app_breast_cancer.log
 │   └── main_breast_cancer.log
 │
+├── examples/
+│   ├── invalid_type.json
+│   ├── missing_features.json
+│   ├── missing_key.json
+│   ├── valid_request.json
+│   └── wrong_features_type.json
+│
 └── .github/workflows/
     └── ci-cd.yml
 ```
 
 ## Environment & Reproducibility
+
 Dependencies and virtual environments are managed using uv, ensuring:
 
 - Deterministic builds
-
 - Fast dependency resolution
-
 - Clean separation from system Python
 
-Install dependencies:
+### Install dependencies
 
 ```bash
 uv sync
@@ -120,6 +125,7 @@ uv run python ...
 ```
 
 ## Model Training
+
 Train the supervised ML model and persist it into models/:
 
 ```bash
@@ -177,6 +183,90 @@ curl -X POST http://127.0.0.1:5000/predict \
      -H "Content-Type: application/json" \
      -d '{"features": [14.2, 20.1, 92.3, 600.1, 0.11]}'
 ```
+
+## Example Payloads for API Validation
+
+This repository includes a complete set of JSON request payloads designed to validate the API input contract.
+
+These files serve as:
+
+- Practical usage examples for API consumers
+
+- Contract testing references
+
+- Input validation edge-case coverage
+
+## All payloads are located in
+
+```bash
+examples/
+```
+
+### Available Test Payloads
+
+|File|Purpose|Expected Result|
+|-|-|-|
+|valid_request.json|Correct input format|Successful prediction|
+|missing_features.json|Missing feature values inside array|400 Validation Error|
+|missing_key.json|Entire features key omitted|400 Bad Request|
+|wrong_features_type.json|features provided as wrong container type|400 Bad Request|
+|invalid_type.json|Non-numeric value inside feature list|400 Validation Error|
+
+### Running Manual Requests with curl
+
+You can test the API manually using:
+
+- **Valid Request**
+
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d @examples/valid_request.json
+```
+
+- **Missing Feature Values**
+
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d @examples/missing_features.json
+```
+
+- **Missing Required Key (features)**
+
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d @examples/missing_key.json
+```
+
+- **Wrong features Container Type**
+
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d @examples/wrong_features_type.json
+```
+
+- **Invalid Feature Value Type (Non-Numeric)**
+
+```bash
+curl -X POST http://127.0.0.1:5000/predict \
+     -H "Content-Type: application/json" \
+     -d @examples/invalid_type.json
+```
+
+### Why These Payloads Matter
+
+Strict input validation is critical in production ML systems.
+
+These payloads ensure:
+
+- The API rejects malformed requests early
+- The model never receives invalid tensors
+- Consumers understand the required schema
+- Edge cases are reproducible and testable
+- This mirrors real-world ML deployment practices where prediction services must enforce a stable contract.
 
 ## Model Availability Behavior
 
@@ -270,7 +360,7 @@ The container encapsulates:
 
 - **Data Scientist & Machine Learning Practitioner**
 
-### Email:
+### Email
 
 - [harrue.ds@gmail.com](mailto:harrue.ds@gmail.com)
 - [henzo.arruemu@itacademy.cl](mailto:henzo.arruemu@itacademy.cl)

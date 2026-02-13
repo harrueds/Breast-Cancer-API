@@ -1,6 +1,6 @@
 [project]
 name = "Breast-Cancer-API"
-version = "1.1.0"
+version = "1.2.0"
 description = "REST API for breast cancer prediction based in numerical parameters"
 readme = "README.md"
 requires-python = ">=3.9"

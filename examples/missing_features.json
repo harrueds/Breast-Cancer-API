@@ -1,0 +1,61 @@
+{
+    "_comment": "INVALID test file for API error validation",
+    "_purpose": "This file intentionally contains incorrect data to test the error-handling behavior of the breast cancer prediction API. It is used to verify that the API correctly validates the input and returns appropriate error messages.",
+    "_error_type": "Insufficient number of features",
+    "_specific_error": {
+        "description": "The 'features' array contains only 29 values instead of the required 30",
+        "expected_values": 30,
+        "provided_values": 29,
+        "missing_feature": "feature_23 (Worst area) - index 23"
+    },
+    "_usage": "curl -X POST http://127.0.0.1:5000/predict -H 'Content-Type: application/json' -d @missing_features.json",
+    "_expected_response": {
+        "http_code": 400,
+        "error_type": "Bad Request or Prediction Error",
+        "message": "Error related to incorrect feature array dimensions"
+    },
+    "_comparison_with_valid": {
+        "valid_file": "valid_request.json (30 features)",
+        "this_file": "missing_features.json (29 features)",
+        "difference": "One feature is missing at position 23"
+    },
+    "_model_impact": "The scikit-learn model expects exactly 30 features. When receiving only 29, model.predict() will fail because the input dimensions do not match those used during training.",
+    "features": [
+        14.2,
+        20.3,
+        92.4,
+        600.5,
+        0.1,
+        0.2,
+        0.3,
+        0.1,
+        0.2,
+        0.05,
+        0.3,
+        1.0,
+        2.0,
+        30.0,
+        0.01,
+        0.1,
+        0.05,
+        0.01,
+        0.05,
+        0.01,
+        15.0,
+        25.0,
+        100.0,
+        0.12,
+        0.4,
+        0.6,
+        0.2,
+        0.3,
+        0.08
+    ],
+    "_technical_note": "This file demonstrates the importance of input validation in Machine Learning APIs. Without proper validation, errors like this could cause unhandled exceptions on the server.",
+    "_related_test_cases": {
+        "test_1": "JSON with incorrect key (missing 'features')",
+        "test_2": "Features provided as a string instead of a list",
+        "test_3": "Features containing non-numeric values (e.g., strings)",
+        "test_4": "This file - incorrect number of features"
+    }
+}
