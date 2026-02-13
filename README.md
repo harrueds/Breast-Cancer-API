@@ -3,7 +3,8 @@
 ## Machine Learning · MLOps · Python · Docker · CI/CD
 
 [![wakatime](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950.svg)](https://wakatime.com/badge/user/8bfb91a4-b57e-4540-bf32-05c8afcd58a3/project/2c0756c4-1677-488d-8e99-e8fd044b0950)
-**Project Status:** Active Development (Pre-Production)
+
+## **Project Status:** Active Development (Pre-Production)
 
 - This project is under active development and intended as a production-oriented ML engineering showcase.
 - The API contract is considered stable, but internal components may evolve.
