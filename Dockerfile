@@ -28,11 +28,16 @@ RUN uv sync --no-dev
 
 # Copy application source code
 COPY src/ ./src/
-COPY models/ ./models/
-COPY logs/ ./logs/
+
+# Create folders (safe)
+RUN mkdir -p models logs
+
+# Copy entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # Expose API port
 EXPOSE 5000
 
-# Run the application
-CMD ["uv", "run", "python", "-m", "api_breast_cancer_prediction"]
+# Run training first, then serve
+CMD ["/app/entrypoint.sh"]
